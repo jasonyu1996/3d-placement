@@ -34,12 +34,6 @@ A set of PlacedBoxs.
 * PackageisLegal // Detect if Boxes are collide with others
 * GetVolumn // the sum of the volumn of Boxes.
 
-### BoxPacker // the User Interface Class
-
-Abstract.
-
-* virtual packBoxes(const vector&lt;Box&rt;&) = 0
-
 ### BoxPerturbStrategy  // Used in SA algorithm
 
 Abstract
@@ -48,6 +42,16 @@ Abstract
 * clear
 * virtual getBoxPackage = 0
 * virtual perturb(double degree) = 0
+
+### ContourStructure 
+
+Abstract
+
+* int Update(int x1, int y1, int x2, int y2, int add) // Search the max value and modify it. Used in T-tree.
+
+### DoubleLink :: ContourStructure
+
+### SegmentTree :: ContourStructure
 
 ### TTree: BoxPerturbStrategy
 
@@ -63,11 +67,20 @@ Abstract.
 
 ### SAOptimalConfig // Fundamental parameters used in SA algorithm 
 
+### BoxPacker // the User Interface Class
+
+Abstract.
+
+* virtual packBoxes(const vector&lt;Box&rt;&) = 0
+
 ### SAOptimalBoxPacker: BoxPacker
 
 Simulated Annealing algorithm.
 
-* OptimalBoxPacker(BoxPerturbStrategy, BoxPackageValueStrategy)
+* BoxPerturbStrategy
+* BoxPackageValueStrategy
+* SAOptimalConfig
+* SAOptimalBoxPacker(BoxPerturbStrategy, BoxPackageValueStrategy, SAOptimalConfig) // Construction Function.
 
 ## Reference
 
