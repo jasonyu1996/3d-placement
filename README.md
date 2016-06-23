@@ -6,22 +6,21 @@ This is the team project for the OOP course. It tries to optimize the volume of 
 
 ### Box
 
-Defined with three edge lengths, `len0`, `len1` and `len2`. Note that a Box is independent of the order of these lengths, i.e, two Boxs are the same if and only if their corresponding edge lengths can be identical after being reordered arbitrarily.
+Defined with three edge lengths, `T`, `X` and `Y`. Note that a Box is independent of the order of these lengths, i.e, two Boxs are the same if and only if their corresponding edge lengths can be identical after being reordered arbitrarily.
 
+* int T,X,Y	
 * getVolume
+* randomRotate  // Randomly swap T,X and Y.
 
 ### Point
 
 Represented by its coordinates, i.e, the coordinates of the vector from the origin to it. The Point here lies in 3D space.
 
-### OrientedBox
-
-A Box with its orientation fixed. Note here that only those orientations where the edges are all parallel to coordinate axes are supported.
-
-### PlacedBox
+### PlacedBox: public Box
 
 An OrientedBox with a specified position.
 
+* point pt
 * getDiagonalPointA
 * getDiagonalPointB
 
@@ -29,41 +28,46 @@ An OrientedBox with a specified position.
 
 A set of PlacedBoxs.
 
+* std::vector&lt;PlacedBox&rt; Boxes  
 * add: adding a placed cuboid
 * getBoundingBox
+* PackageisLegal // Detect if Boxes are collide with others
+* GetVolumn // the sum of the volumn of Boxes.
 
-### BoxPackageModel
+### BoxPacker // the User Interface Class
+
+Abstract.
+
+* virtual packBoxes(const vector&lt;Box&rt;&) = 0
+
+### BoxPerturbStrategy  // Used in SA algorithm
 
 Abstract
 
 * fill
 * clear
-* getPlacedBoxSet
-* perturb(double degree)
+* virtual getBoxPackage = 0
+* virtual perturb(double degree) = 0
 
-### TTree: BoxPackageModel
+### TTree: BoxPerturbStrategy
 
 T-tree representation for a *compact* BoxPackage.
 
-### BoxPacker
+### BoxPackageValueStrategy // Used in SA algorithm
 
 Abstract.
 
-* packBoxes(const vector<Box>&)
+* getWeight(const BoxPackage&)
 
-### BoxPackageModelWeight 
+### BoxVolume: BoxPackageValueStrategy 
 
-Abstract.
-
-* getWeight(const BoxPackageModel&)
-
-### BoundingVolumeWeight: BoxPackageModelWeight
+### SAOptimalConfig // Fundamental parameters used in SA algorithm 
 
 ### SAOptimalBoxPacker: BoxPacker
 
 Simulated Annealing algorithm.
 
-* OptimalBoxPacker(BoxPackageModel, BoxPackageModelWeight)
+* OptimalBoxPacker(BoxPerturbStrategy, BoxPackageValueStrategy)
 
 ## Reference
 
