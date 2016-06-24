@@ -7,6 +7,7 @@
 
 class TTreeFactory: public BoxPerturberFactory{
 public:
+    ContourStructureFactory* contour_factory ;
     TTreeFactory(ContourStructureFactory* contour_factory);
     TTree* getBoxPerturber(const std::vector<Box>& boxes){
         return new TTree(contour_factory, boxes);

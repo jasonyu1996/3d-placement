@@ -1,6 +1,7 @@
 #ifndef TTREE_H
 #define TTREE_H
 #include "Strategy/boxperturber.h"
+#include "ContourStructure/contourstructurefactory.h"
 
 class TTree;
 
@@ -14,7 +15,7 @@ private:
 
 class TTree : public BoxPerturber{
 public:
-    void getBoxPackage() ;
+    void getBoxPackage(BoxPackage& boxpackage) ;
     void perturb(double degree) ;
     TTree(const TTree& b);
     TTree(ContourStructureFactory* contour_factory, const std::vector<Box>& boxes);

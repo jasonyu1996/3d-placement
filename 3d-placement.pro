@@ -16,4 +16,5 @@ HEADERS += \
 
 SOURCES += \
     main.cpp \
-    Strategy/ttree.cpp
+    Strategy/ttree.cpp \
+    kernel.cpp

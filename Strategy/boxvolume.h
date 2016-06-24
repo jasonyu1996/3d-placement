@@ -3,7 +3,8 @@
 #include "Strategy/boxpackagevaluestrategy.h"
 
 class BoxVolume : public BoxPackageValueStrategy {
-    int64 getWeight(const BoxPackage& boxpackage) ;
+public:
+    long long getWeight(const BoxPackage& boxpackage) ;
     // Need Implemention
 };
 

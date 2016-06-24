@@ -15,14 +15,15 @@ class SAOptimalConfig {
 
 class SAOptimalBoxPacker : public BoxPacker {
 public:
-    BoxPerturber* PS ;
+    BoxPerturberFactory* PS ;
     BoxPackageValueStrategy* VS ;
     SAOptimalConfig* Config ;
     SAOptimalBoxPacker(BoxPerturberFactory* PS,
                        BoxPackageValueStrategy* VS,
                        SAOptimalConfig* Config
                        ) : PS(PS), VS(VS), Config(Config) {}
-    // Need Implemention
+     void packBoxes(const std::vector<Box>& box, BoxPackage& answer) ;
+     // Need Implemention
 };
 
 #endif // SAOPTIMALBOXPACKER_H
