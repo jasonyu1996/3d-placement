@@ -34,12 +34,10 @@ A set of PlacedBoxs.
 * PackageisLegal // Detect if Boxes are collide with others
 * GetVolumn // the sum of the volumn of Boxes.
 
-### BoxPerturbStrategy  // Used in SA algorithm
+### BoxPerturber  // Used in SA algorithm
 
 Abstract
 
-* fill
-* clear
 * virtual getBoxPackage = 0
 * virtual perturb(double degree) = 0
 
@@ -53,9 +51,17 @@ Abstract
 
 ### SegmentTree :: ContourStructure
 
-### TTree: BoxPerturbStrategy
+### TTree: BoxPerturber
 
 T-tree representation for a *compact* BoxPackage.
+
+### BoxPerturberFactory
+
+Abstract
+
+* getBoxPerturber
+
+### TTreeFactory : BoxPerturbStrategy
 
 ### BoxPackageValueStrategy // Used in SA algorithm
 
@@ -77,10 +83,10 @@ Abstract.
 
 Simulated Annealing algorithm.
 
-* BoxPerturbStrategy
+* BoxPerturberFactory
 * BoxPackageValueStrategy
 * SAOptimalConfig
-* SAOptimalBoxPacker(BoxPerturbStrategy, BoxPackageValueStrategy, SAOptimalConfig) // Construction Function.
+* SAOptimalBoxPacker(BoxPerturberFactory, BoxPackageValueStrategy, SAOptimalConfig) // Construction Function.
 
 ## Reference
 

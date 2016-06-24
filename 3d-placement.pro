@@ -1,14 +1,19 @@
 HEADERS += \
     kernel.h \
-    ContourStructure/doublelink.h \
     ContourStructure/contourstructure.h \
     ContourStructure/segmentree.h \
-    Strategy/boxperturbstrategy.h \
     Strategy/ttree.h \
     Strategy/boxpackagevaluestrategy.h \
     Strategy/boxvolume.h \
     boxpacker.h \
-    saoptimalboxpacker.h
+    saoptimalboxpacker.h \
+    Strategy/boxperturber.h \
+    ContourStructure/naivecontourstructure.h \
+    ContourStructure/contourstructurefactory.h \
+    Strategy/boxperturberfactory.h \
+    Strategy/ttreefactory.h \
+    ContourStructure/naivecontourstructurefactory.h
 
 SOURCES += \
-    main.cpp
+    main.cpp \
+    Strategy/ttree.cpp
