@@ -1,6 +1,8 @@
 #ifndef CONTOURSTRUCTUREFACTORY_H
 #define CONTOURSTRUCTUREFACTORY_H
 
+#include "contourstructure.h"
+
 class ContourStructureFactory{
 public:
     virtual ~ContourStructureFactory() {}

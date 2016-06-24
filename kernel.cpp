@@ -30,8 +30,8 @@ ostream& operator << (ostream& os, BoxPackage boxpackage)
     os << endl ;
 
     long long V1, V2 ;
-    os << "Volume of all boxes: " << V1 = boxpackage.GetVolume() << endl ;
-    os << "Volume of bounding box: " << V2 = boxpackage.getBoundingBox().getVolume() << endl ;
+    os << "Volume of all boxes: " << (V1 = boxpackage.GetVolume()) << endl ;
+    os << "Volume of bounding box: " << (V2 = boxpackage.getBoundingBox().getVolume()) << endl ;
     os << "Wasted volume: " << V2-V1 << "    with ratio: " << (double)(V2-V1)/V1 << endl ;
     os << endl ;
 

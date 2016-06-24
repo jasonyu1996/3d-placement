@@ -24,7 +24,7 @@ public:
     Box(int T=0, int X=0, int Y=0):T(T), X(X), Y(Y) {}
     long long getVolume() {return (long long)T*X*Y ;}
     void randomRotate() ;
-    friend std::istream& operator >> (std::istream& is, Box box) ;
+    friend std::istream& operator >> (std::istream& is, const Box& box) ;
 };
 inline void Box::randomRotate()
 {
@@ -32,7 +32,7 @@ inline void Box::randomRotate()
     if(Random(2, 0)) std::swap(X, Y) ;
     if(Random(2, 0)) std::swap(T, Y) ;
 }
-std::istream& operator >> (std::istream& is, Box box)
+inline std::istream& operator >> (std::istream& is, const Box& box)
 {
     is >> box.T >> box.X >> box.Y ;
     return is ;
@@ -48,9 +48,9 @@ public:
     Point operator + (Point b) const {return Point(x+b.x, y+b.y, z+b.z) ;}
     Point operator - (Point b) const {return Point(x-b.x, y-b.y, z-b.z) ;}
     Point operator * (int b) const {return Point(x*b, y*b, z*b) ;}
-    friend std::ostream& operator << (std::ostream& os, Point point) ;
+    friend std::ostream& operator << (std::ostream& os, const Point& point) ;
 };
-std::ostream& operator << (std::ostream& os, Point point)
+inline std::ostream& operator << (std::ostream& os, const Point& point)
 {
     os << "(" << point.x << "," << point.y << "," << point.z << ")" ;
     return os ;
@@ -61,13 +61,13 @@ std::ostream& operator << (std::ostream& os, Point point)
 class PlacedBox : public Box {
 public:
     Point origin ;
-    PlacedBox(Box box=Box(), Point origin=Point()) : Box(box), origin(origin) {}
+    PlacedBox(Box box=Box(), Point origin=Point()) :  origin(origin), Box(box) {}
     PlacedBox(Point ga, Point gb) : origin(ga), Box((gb-ga).x, (gb-ga).y, (gb-ga).z) {}
-    Point getDiagonalPointA() {return origin ;}
-    Point getDiagonalPointB() {return origin+Point(T, X, Y) ;}
-    friend std::ostream& operator << (std::ostream& os, PlacedBox box) ;
+    const Point& getDiagonalPointA() const {return origin ;}
+    const Point& getDiagonalPointB() const {return origin+Point(T, X, Y) ;}
+    friend std::ostream& operator << (std::ostream& os, const PlacedBox& box) ;
 };
-std::ostream& operator << (std::ostream& os, PlacedBox box)
+inline std::ostream& operator << (std::ostream& os, const PlacedBox& box)
 {
     os << "A Placed Box: " << box.getDiagonalPointA()
        << " ---- " << box.getDiagonalPointB() << std::endl ;
