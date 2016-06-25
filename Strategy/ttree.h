@@ -63,7 +63,7 @@ private:
         Link* link = new Link(x, val, belong);
         link_pool.push_back(link);
         if(primary)
-
+            link_map[belong] = link;
         return link;
     }
 

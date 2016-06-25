@@ -1,6 +1,7 @@
 #include "ttree.h"
 
-TTree::TTree(ContourStructureFactory *contour_factory, const std::vector<Box> &boxes): m_boxes(boxes), root(NULL){
+TTree::TTree(ContourStructureFactory *contour_factory, const std::vector<Box> &boxes): m_boxes(boxes), root(NULL),
+    contour_factory(contour_factory), node_map((int)boxes.size()){
     std::random_shuffle(m_boxes.begin(), m_boxes.end());
     int n = (int)m_boxes.size();
     for(int i = 0; i < n; i ++)
@@ -31,10 +32,10 @@ int TTree::appendLink(int fa, int id, int d){
     }
     else if(d == 0){ // left child
         t = link_map[fa]->x + m_boxes[fa].T;
-        st = link_map[fa];
+        st = link_map[fa]->nxt->nxt;
     } else{ // mid child
         t = link_map[fa]->x;
-        st = link_map[fa]->nxt->nxt;
+        st = link_map[fa];
     }
     tr = t + m_boxes[id].T;
     cur = st;
@@ -86,7 +87,7 @@ void TTree::dfsBinaryTree(TNode *cur, int t_offset, BoxPackage& res){
 BoxPackage TTree::getBoxPackage(){
     BoxPackage res;
 
-    decompose(root, 0, true, btrees);
+    decompose(root, true, 0, btrees);
 
     contour = contour_factory->getContourStructure();
 
@@ -109,6 +110,7 @@ BoxPackage TTree::getBoxPackage(){
         link_pool.clear();
     }
 
+    delete contour;
 
     btrees.clear();
     return res;
@@ -199,7 +201,8 @@ TNode* TTree::randomReplaceRoot(TNode *node){
 void TTree::remove(TNode* node){
     TNode* nroot = randomReplaceRoot(node);
     getConnection(node) = nroot;
-    nroot->par = node->par;
+    if(nroot != NULL)
+        nroot->par = node->par;
 
     node_map[node->id] = NULL;
     delete node;

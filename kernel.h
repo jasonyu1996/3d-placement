@@ -63,14 +63,14 @@ public:
     Point origin ;
     PlacedBox(Box box=Box(), Point origin=Point()) :  origin(origin), Box(box) {}
     PlacedBox(Point ga, Point gb) : origin(ga), Box((gb-ga).x, (gb-ga).y, (gb-ga).z) {}
-    const Point& getDiagonalPointA() const {return origin ;}
-    const Point& getDiagonalPointB() const {return origin+Point(T, X, Y) ;}
+    Point getDiagonalPointA() const {return origin ;}
+    Point getDiagonalPointB() const {return origin+Point(T, X, Y) ;}
     friend std::ostream& operator << (std::ostream& os, const PlacedBox& box) ;
 };
 inline std::ostream& operator << (std::ostream& os, const PlacedBox& box)
 {
-    os << "A Placed Box: " << box.getDiagonalPointA()
-       << " ---- " << box.getDiagonalPointB() << std::endl ;
+    os << "PlacedBox(" << box.getDiagonalPointA()
+       << " ---- " << box.getDiagonalPointB() << ")";
     return os ;
 }
 
