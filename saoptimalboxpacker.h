@@ -10,6 +10,9 @@
 #include "ContourStructure/naivecontourstructurefactory.h"
 
 class SAOptimalConfig {
+public:
+	double T, T_min, alpha ;
+    SAOptimalConfig(double T=1.0, double T_min=0.000001, double alpha=0.9) : T(T), T_min(T_min), alpha(alpha) {}
     double accProb(double, double, double); //calculates acceptance probability for SA algorithm
 };
 
@@ -22,8 +25,7 @@ public:
                        BoxPackageValueStrategy* VS,
                        SAOptimalConfig* Config
                        ) : PS(PS), VS(VS), Config(Config) {}
-     int packBoxes(const std::vector<Box>& box, BoxPackage& answer) ;
-     // Need Implemention
+     long long packBoxes(const std::vector<Box>& box, BoxPackage& answer) ;
 };
 
 #endif // SAOPTIMALBOXPACKER_H

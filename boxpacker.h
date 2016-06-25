@@ -5,7 +5,7 @@
 class BoxPacker {
 public:
     virtual ~BoxPacker() { }
-    virtual int packBoxes(const std::vector<Box>& box, BoxPackage& answer) = 0 ;
+    virtual long long packBoxes(const std::vector<Box>& box, BoxPackage& answer) = 0 ;
 };
 
 #endif // BOXPACKER_H
