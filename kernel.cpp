@@ -8,7 +8,7 @@ bool Intersect(int x1, int y1, int x2, int y2)
     return y1 > x2 ;
 }
 
-bool BoxPackage::PackageisLegal()
+bool BoxPackage::PackageisLegal() const
 {
     for(int i = 0; i < Boxes.size(); i ++)
         for(int j = i+1; j < Boxes.size(); j ++)

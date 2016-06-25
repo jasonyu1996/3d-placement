@@ -21,4 +21,5 @@ SOURCES += \
     Strategy/ttree.cpp \
     kernel.cpp \
     ContourStructure/naivecontourstructure.cpp \
-    ContourStructure/kdtreecontourstructure.cpp
+    ContourStructure/kdtreecontourstructure.cpp \
+    saoptimalboxpacker.cpp

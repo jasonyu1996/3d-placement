@@ -3,8 +3,7 @@
 
 #include "contourstructure.h"
 #include <cstddef>
-
-const int INF = 0x3f3f3f3f;
+#include "kernel.h"
 
 class KDTreeContourStructure : public ContourStructure {
 public:

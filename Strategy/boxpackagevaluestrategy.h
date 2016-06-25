@@ -4,7 +4,7 @@
 
 class BoxPackageValueStrategy {
 public:
-    virtual ~BoxPackageValueStrategy() ;
+    virtual ~BoxPackageValueStrategy() {} ;
     virtual long long getWeight(const BoxPackage& boxpackage) = 0 ;
 };
 

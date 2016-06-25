@@ -22,7 +22,7 @@ public:
                        BoxPackageValueStrategy* VS,
                        SAOptimalConfig* Config
                        ) : PS(PS), VS(VS), Config(Config) {}
-     void packBoxes(const std::vector<Box>& box, BoxPackage& answer) ;
+     int packBoxes(const std::vector<Box>& box, BoxPackage& answer) ;
      // Need Implemention
 };
 

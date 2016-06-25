@@ -5,7 +5,11 @@
 class BoxVolume : public BoxPackageValueStrategy {
 public:
     long long getWeight(const BoxPackage& boxpackage) ;
-    // Need Implemention
 };
+
+inline long long BoxVolume::getWeight(const BoxPackage& boxpackage)
+{
+    return boxpackage.getBoundingBox().getVolume() ;
+}
 
 #endif // BOXVOLUME_H

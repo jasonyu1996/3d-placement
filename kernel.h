@@ -14,7 +14,7 @@
 #include <vector>
 
 #define Random(xx, yy) (rand()%(xx)+(yy))
-#define Inf 0x7ffffff
+#define INF 0x3f3f3f3f
 
 // -----------------------Class Box--------------------------
 
@@ -22,9 +22,9 @@ class Box {
 public:
     int T, X, Y ;
     Box(int T=0, int X=0, int Y=0):T(T), X(X), Y(Y) {}
-    long long getVolume() {return (long long)T*X*Y ;}
+    long long getVolume() const {return (long long)T*X*Y ;}
     void randomRotate() ;
-    friend std::istream& operator >> (std::istream& is, const Box& box) ;
+    friend std::istream& operator >> (std::istream& is, Box& box) ;
 };
 inline void Box::randomRotate()
 {
@@ -32,7 +32,7 @@ inline void Box::randomRotate()
     if(Random(2, 0)) std::swap(X, Y) ;
     if(Random(2, 0)) std::swap(T, Y) ;
 }
-inline std::istream& operator >> (std::istream& is, const Box& box)
+inline std::istream& operator >> (std::istream& is, Box& box)
 {
     is >> box.T >> box.X >> box.Y ;
     return is ;
@@ -70,7 +70,7 @@ public:
 inline std::ostream& operator << (std::ostream& os, const PlacedBox& box)
 {
     os << "PlacedBox(" << box.getDiagonalPointA()
-       << " ---- " << box.getDiagonalPointB() << ")";
+       << " ---- " << box.getDiagonalPointB() << ")" << std::endl ;
     return os ;
 }
 
@@ -80,14 +80,14 @@ class BoxPackage {
 public:
     std::vector<PlacedBox> Boxes ;
     void add(PlacedBox b) {Boxes.push_back(b) ;}
-    PlacedBox getBoundingBox() ;
-    bool PackageisLegal() ;
-    long long GetVolume() ;
+    PlacedBox getBoundingBox() const ;
+    bool PackageisLegal() const ;
+    long long GetVolume() const ;
     friend std::ostream& operator << (std::ostream& os, BoxPackage boxpackage) ;
 };
-inline PlacedBox BoxPackage::getBoundingBox()
+inline PlacedBox BoxPackage::getBoundingBox() const
 {
-    Point dig1 = Point(Inf, Inf), dig2 = Point(-Inf, -Inf) ;
+    Point dig1 = Point(INF, INF), dig2 = Point(-INF, -INF) ;
     for(int i = 0; i < Boxes.size(); i ++)
     {
         dig1.x = std::min(dig1.x, Boxes[i].origin.x) ;
@@ -99,15 +99,13 @@ inline PlacedBox BoxPackage::getBoundingBox()
     }
     return PlacedBox(dig1, dig2) ;
 }
-inline long long BoxPackage::GetVolume()
+inline long long BoxPackage::GetVolume() const
 {
     long long sum = 0 ;
     for(int i = 0; i < Boxes.size(); i ++)
         sum += Boxes[i].getVolume() ;
     return sum ;
 }
-
-const int INF = 0x3f3f3f3f;
 
 
 #endif // KERNEL_H
