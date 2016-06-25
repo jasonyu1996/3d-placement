@@ -1,7 +1,5 @@
 #include "ttree.h"
 
-const int INF = 0x3f3f3f3f;
-
 TTree::TTree(ContourStructureFactory *contour_factory, const std::vector<Box> &boxes): m_boxes(boxes), root(NULL){
     std::random_shuffle(m_boxes.begin(), m_boxes.end());
     int n = (int)m_boxes.size();
@@ -68,7 +66,7 @@ int TTree::appendLink(int fa, int id, int d){
 void TTree::placeBox(int fa, int id, int d, int t_offset, BoxPackage& pack){
     int y = appendLink(fa, id, d);
     int t = t_offset + link_map[id]->x;
-    int x = 0;// temporarily for test
+    int x = contour->Update(t, y, t + m_boxes[id].T, y + m_boxes[id].Y, m_boxes[id].X);// temporarily for test
     pack.add(PlacedBox(Point(x, y, t),
                        Point(x + m_boxes[id].X, y + m_boxes[id].Y, t + m_boxes[id].T)));
 }
@@ -90,8 +88,7 @@ BoxPackage TTree::getBoxPackage(){
 
     decompose(root, 0, true, btrees);
 
-//    ContourStructure* contour = contour_factory->getContourStructure();
-
+    contour = contour_factory->getContourStructure();
 
     int m = (int)btrees.size();
     for(int i = 0; i < m; i ++){// for each binary tree

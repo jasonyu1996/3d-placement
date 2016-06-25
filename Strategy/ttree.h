@@ -57,6 +57,7 @@ private:
     int randAvailableId();
     TNode*& getConnection(TNode* cur);
 
+    ContourStructure* contour;
     Link* base_link;
     Link* newLink(int x, int val, int belong, bool primary){
         Link* link = new Link(x, val, belong);

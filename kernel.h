@@ -107,5 +107,7 @@ inline long long BoxPackage::GetVolume()
     return sum ;
 }
 
+const int INF = 0x3f3f3f3f;
+
 
 #endif // KERNEL_H

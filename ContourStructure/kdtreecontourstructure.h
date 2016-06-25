@@ -4,9 +4,11 @@
 #include "contourstructure.h"
 #include <cstddef>
 
+const int INF = 0x3f3f3f3f;
+
 class KDTreeContourStructure : public ContourStructure {
 public:
-	KDTreeContourStructure(int n=0, int m=0);
+    KDTreeContourStructure(int n=-INF, int m=INF);
 	~KDTreeContourStructure();
 	int Update(int x1, int y1, int x2, int y2, int add);
 private:

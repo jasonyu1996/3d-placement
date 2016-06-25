@@ -4,7 +4,7 @@
 
 class BoxPacker {
 public:
-    virtual ~BoxPacker() ;
+    virtual ~BoxPacker() { }
     virtual void packBoxes(const std::vector<Box>& box, BoxPackage& answer) = 0 ;
 };
 
