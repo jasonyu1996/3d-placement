@@ -1,8 +1,14 @@
 #include "kernel.h"
 #include "saoptimalboxpacker.h"
+#include <cmath>
 
 using namespace std ;
 typedef long long LL ;
+
+double SAOptimalConfig::accProb (double oldCost, double newCost, double T)
+{
+    return exp((oldCost - newCost)/T);
+}
 
 int SAOptimalBoxPacker::packBoxes(const std::vector<Box>& box, BoxPackage& answer)
 {
