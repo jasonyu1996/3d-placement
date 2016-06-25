@@ -10,7 +10,6 @@
 #include "ContourStructure/naivecontourstructurefactory.h"
 
 class SAOptimalConfig {
-    // Need Implemention
     double accProb(double, double, double); //calculates acceptance probability for SA algorithm
 };
 
