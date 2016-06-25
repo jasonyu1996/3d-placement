@@ -5,7 +5,7 @@ typedef long long LL ;
 bool Intersect(int x1, int y1, int x2, int y2)
 {
     if(x1 > x2) swap(x1, x2), swap(y1, y2) ;
-    return y1 >= x2 ;
+    return y1 > x2 ;
 }
 
 bool BoxPackage::PackageisLegal()

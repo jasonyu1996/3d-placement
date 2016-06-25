@@ -187,7 +187,8 @@ TNode* TTree::randomReplaceRoot(TNode *node){
         TNode* nroot = node->getSon(t);
         TNode* nn= randomReplaceRoot(nroot);
         nroot->getSon(t) = nn;
-        nn->par = nroot;
+        if(nn != NULL)
+            nn->par = nroot;
         for(int i = 0; i < 3; i ++)
             if(i != t){
                 nroot->getSon(i) = node->getSon(i);
