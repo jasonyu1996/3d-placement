@@ -43,6 +43,9 @@ private:
     std::vector<Box> m_boxes;
     TNode* root;
     ContourStructureFactory* contour_factory;
+    std::vector<std::pair<TNode*, int> > btrees;
+    std::vector<Link*> link_pool;
+    Link** link_map;
 
     void randomInsert(int id);
     void insertAt(TNode* cur, TNode* node, int d);
@@ -54,11 +57,20 @@ private:
     int randAvailableId();
     TNode*& getConnection(TNode* cur);
 
-    void placeBox(int fa, int id, int d, int t_offset, Link** link_map, BoxPackage& pack);
-    void dfsBinaryTree(TNode* cur, int t_offset, Link** link_map, BoxPackage& pack);
+    Link* base_link;
+    Link* newLink(int x, int val, int belong, bool primary){
+        Link* link = new Link(x, val, belong);
+        link_pool.push_back(link);
+        if(primary)
+
+        return link;
+    }
+
+    void placeBox(int fa, int id, int d, int t_offset, BoxPackage& pack);
+    void dfsBinaryTree(TNode* cur, int t_offset, BoxPackage& pack);
     void decompose(TNode* cur, bool new_tree, int t_val, std::vector<std::pair<TNode*, int> >& btrees);
     void clear(TNode* cur);
-    int appendLink(int fa, int id, int d, Link** link_map);
+    int appendLink(int fa, int id, int d);
 
     std::vector<TNode*> node_map;
 //    void fill() ;

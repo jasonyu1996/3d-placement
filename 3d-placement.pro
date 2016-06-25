@@ -12,9 +12,12 @@ HEADERS += \
     ContourStructure/contourstructurefactory.h \
     Strategy/boxperturberfactory.h \
     Strategy/ttreefactory.h \
-    ContourStructure/naivecontourstructurefactory.h
+    ContourStructure/naivecontourstructurefactory.h \
+    ContourStructure/kdtreecontourstructure.h
 
 SOURCES += \
     main.cpp \
     Strategy/ttree.cpp \
-    kernel.cpp
+    kernel.cpp \
+    ContourStructure/naivecontourstructure.cpp \
+    ContourStructure/kdtreecontourstructure.cpp

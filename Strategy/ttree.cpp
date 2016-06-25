@@ -1,18 +1,17 @@
 #include "ttree.h"
-#include<stack>
 
-//static void linkAfter(){
-
-//}
+const int INF = 0x3f3f3f3f;
 
 TTree::TTree(ContourStructureFactory *contour_factory, const std::vector<Box> &boxes): m_boxes(boxes), root(NULL){
     std::random_shuffle(m_boxes.begin(), m_boxes.end());
     int n = (int)m_boxes.size();
     for(int i = 0; i < n; i ++)
         randomInsert(i);
+    link_map = new Link*[n];
 }
 
 TTree::~TTree(){
+    delete []link_map;
     clear(root);
 }
 
@@ -25,64 +24,86 @@ void TTree::clear(TNode *cur){
     delete cur;
 }
 
-int TTree::appendLink(int fa, int id, int d, Link **link_map){
+int TTree::appendLink(int fa, int id, int d){
+    int t, tr;
+    Link *st, *cur;
     if(fa == -1){ // empty linked list
-        link_map[id] = new Link(0, 0, id);
-        link_map[id]->nxt = new Link(m_boxes[id].T, 0, id);
-        link_map[id]->nxt->prev = link_map[id];
-        return 0;
+        t = 0;
+        st = base_link;
     }
-    int t;
-    Link* cur;
-    if(d == 0){
+    else if(d == 0){ // left child
         t = link_map[fa]->x + m_boxes[fa].T;
-        cur = link_map[fa]->nxt;
-    } else{
+        st = link_map[fa];
+    } else{ // mid child
         t = link_map[fa]->x;
-        cur = link_map[fa]->nxt->nxt;
+        st = link_map[fa]->nxt->nxt;
     }
+    tr = t + m_boxes[id].T;
+    cur = st;
+    int Y = 0;
+    while(cur->nxt->x <= tr){
+        if(cur->val > Y)
+            Y = cur->val;
+        cur = cur->nxt->nxt;
+    }
+    if(cur->x < tr && cur->val > Y)
+        Y = cur->val;
+    Link* he = newLink(t, Y + m_boxes[id].Y, id, true);
+    Link* ta = newLink(tr, Y + m_boxes[id].Y, id, false);
+    he->nxt = ta;
+    ta->prev = he;
+
+    he->prev = st->prev;
+    if(he->prev != NULL)
+        he->prev->nxt = he;
+    Link* mi = newLink(tr, cur->val, cur->belong, false);
+    mi->nxt = cur->nxt;
+    mi->nxt->prev = mi;
+    ta->nxt = mi;
+    mi->prev = ta;
+
+    return Y;
 }
 
-void TTree::placeBox(int fa, int id, int d, int t_offset, Link **link_map, BoxPackage& pack){
-    int y = appendLink(fa, id, d, link_map);
-    int t = t_offset + link_map[id].x;
+void TTree::placeBox(int fa, int id, int d, int t_offset, BoxPackage& pack){
+    int y = appendLink(fa, id, d);
+    int t = t_offset + link_map[id]->x;
     int x = 0;// temporarily for test
     pack.add(PlacedBox(Point(x, y, t),
                        Point(x + m_boxes[id].X, y + m_boxes[id].Y, t + m_boxes[id].T)));
 }
 
-void TTree::dfsBinaryTree(TNode *cur, int t_offset, Link **link_map, BoxPackage& res){
+void TTree::dfsBinaryTree(TNode *cur, int t_offset, BoxPackage& res){
     if(cur->left != NULL){
-        placeBox(cur->id, cur->left->id, 0, t_offset, link_map, res);
-        dfsBinaryTree(cur->left, t_offset, link_map, res);
+        placeBox(cur->id, cur->left->id, 0, t_offset, res);
+        dfsBinaryTree(cur->left, t_offset, res);
     }
     if(cur->mid != NULL){
-        placeBox(cur->id, cur->mid->id, 1, t_offset, link_map, res);
-        dfsBinaryTree(cur->mid, t_offset, link_map, res);
+        placeBox(cur->id, cur->mid->id, 1, t_offset, res);
+        dfsBinaryTree(cur->mid, t_offset, res);
     }
 }
 
 
 BoxPackage TTree::getBoxPackage(){
     BoxPackage res;
-    static std::vector<std::pair<TNode*, int> > btrees;
-
-    int n = (int)m_boxes.size();
 
     decompose(root, 0, true, btrees);
 
 //    ContourStructure* contour = contour_factory->getContourStructure();
-    static std::vector<Link*> link_pool;
-    Link* link_map = new Link*[n];
 
 
     int m = (int)btrees.size();
     for(int i = 0; i < m; i ++){// for each binary tree
         //perform a depth first seach for the current binary tree
         //TODO
-        placeBox(-1, btrees[i].first->id, 0, btrees[i].second, link_map, res);
+        base_link = newLink(0, 0, -1, false);
+        base_link->nxt = newLink(INF, 0, -1, false);
+        base_link->nxt->prev = base_link;
+
+        placeBox(-1, btrees[i].first->id, 0, btrees[i].second, res);
 //        link_map[btrees[i].first->id] = new Link(btrees[i].first, 0, btrees[i].first->id);
-        dfsBinaryTree(btrees[i].first, btrees[i].second, link_map, res);
+        dfsBinaryTree(btrees[i].first, btrees[i].second, res);
 
         //cleaning
         int linkn = (int)link_pool.size();
@@ -92,8 +113,7 @@ BoxPackage TTree::getBoxPackage(){
     }
 
 
-    delete []link_map;
-    btree.clear();
+    btrees.clear();
     return res;
 }
 
