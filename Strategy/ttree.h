@@ -3,6 +3,16 @@
 #include "Strategy/boxperturber.h"
 #include "ContourStructure/contourstructurefactory.h"
 
+
+struct Link{
+    Link *nxt, *prev;
+    int x, val;
+    int belong;
+    Link(int x, int val, int belong): nxt(NULL), prev(NULL),
+        x(x), val(val), belong(belong) {}
+};
+
+
 class TTree;
 
 class TNode{
@@ -32,6 +42,7 @@ private:
 
     std::vector<Box> m_boxes;
     TNode* root;
+    ContourStructureFactory* contour_factory;
 
     void randomInsert(int id);
     void insertAt(TNode* cur, TNode* node, int d);
@@ -43,8 +54,11 @@ private:
     int randAvailableId();
     TNode*& getConnection(TNode* cur);
 
+    void placeBox(int fa, int id, int d, int t_offset, Link** link_map, BoxPackage& pack);
+    void dfsBinaryTree(TNode* cur, int t_offset, Link** link_map, BoxPackage& pack);
     void decompose(TNode* cur, bool new_tree, int t_val, std::vector<std::pair<TNode*, int> >& btrees);
     void clear(TNode* cur);
+    int appendLink(int fa, int id, int d, Link** link_map);
 
     std::vector<TNode*> node_map;
 //    void fill() ;
