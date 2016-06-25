@@ -22,6 +22,7 @@ private:
     TNode *left, *mid, *right;
     TNode *par;
     TNode(int id): id(id) { }
+    TNode() {}
     TNode*& getSon(int d){
         if(d == 0)
             return left;
@@ -37,8 +38,12 @@ public:
     void perturb(double degree) ;
     TTree(const TTree& b);
     TTree(ContourStructureFactory* contour_factory, const std::vector<Box>& boxes);
+    TTree* clone() const;
+
+
     ~TTree();
 private:
+    TTree() {}
 
     std::vector<Box> m_boxes;
     TNode* root;
@@ -46,6 +51,7 @@ private:
     std::vector<std::pair<TNode*, int> > btrees;
     std::vector<Link*> link_pool;
     Link** link_map;
+    ContourStructure* contour;
 
     void randomInsert(int id);
     void insertAt(TNode* cur, TNode* node, int d);
@@ -57,7 +63,6 @@ private:
     int randAvailableId();
     TNode*& getConnection(TNode* cur);
 
-    ContourStructure* contour;
     Link* base_link;
     Link* newLink(int x, int val, int belong, bool primary){
         Link* link = new Link(x, val, belong);
@@ -67,6 +72,7 @@ private:
         return link;
     }
 
+    TNode* cloneTree(TNode* cur, std::vector<TNode *> &node_map) const;
     void placeBox(int fa, int id, int d, int t_offset, BoxPackage& pack);
     void dfsBinaryTree(TNode* cur, int t_offset, BoxPackage& pack);
     void decompose(TNode* cur, bool new_tree, int t_val, std::vector<std::pair<TNode*, int> >& btrees);

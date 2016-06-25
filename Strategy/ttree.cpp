@@ -239,3 +239,41 @@ void TTree::perturb(double degree){
         else
             randomMove();
 }
+
+TNode* TTree::cloneTree(TNode *cur, std::vector<TNode*>& node_map) const{
+    if(cur == NULL)
+        return NULL;
+    TNode* nn = new TNode();
+    nn->id = cur->id;
+    node_map[nn->id] = nn;
+
+    nn->left = cloneTree(cur->left, node_map);
+    nn->mid = cloneTree(cur->mid, node_map);
+    nn->right = cloneTree(cur->right, node_map);
+
+    if(nn->left != NULL)
+        nn->left->par = nn;
+    if(nn->mid != NULL)
+        nn->mid->par = nn;
+    if(nn->right != NULL)
+        nn->right->par = nn;
+
+    return nn;
+}
+
+TTree* TTree::clone() const{
+    TTree* res = new TTree();
+    res->m_boxes = m_boxes;
+    res->contour_factory = contour_factory;
+
+    int n = (int)m_boxes.size();
+
+    res->link_map = new Link*[n];
+
+    res->node_map.resize(n);
+    res->root = cloneTree(root, res->node_map);
+    if(res->root != NULL)
+        res->root->par = NULL;
+
+    return res;
+}
