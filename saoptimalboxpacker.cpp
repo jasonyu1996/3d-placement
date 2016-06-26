@@ -7,52 +7,74 @@ typedef long long LL ;
 
 double SAOptimalConfig::accProb (double oldCost, double newCost, double T)
 {
-    return exp((oldCost - newCost)/T);
+    //if(T == 1) cout << gamma*(oldCost - newCost)/T << endl ;
+    return exp(gamma*(oldCost - newCost)/T);
 }
 
 long long SAOptimalBoxPacker::packBoxes(const std::vector<Box>& box, BoxPackage& answer)
 {
     ofstream os("Debug.txt") ;
-    BoxPerturber* bestPerturber = PS->getBoxPerturber(box) ;
+    BoxPerturber  *bestPerturber = PS->getBoxPerturber(box), *returnPerturber ;
     
-    long long bestCost, tCost ; // bestCost storesthe best cost of the packging, tCost is the temporary
+    long long bestCost, tCost, returnCost = (long long)INF*INF ; // bestCost storesthe best cost of the packging, tCost is the temporary
     BoxPackage tPackage; // bestPackage storesthe best cost of the packging, tPackage is the temporary
     
     ///
-    double T = Config->T; //starting temperature
-    double T_min = Config->T_min;  //minimum temperature at which process stops
-    double alpha = Config->alpha ;//increment the temperature
     ///
-    
-    tPackage = bestPerturber->getBoxPackage() ;
-    bestCost = VS->getWeight(tPackage) ;
-
-    while (T > T_min)
+    for(int t = 0; t < 20; t ++)
     {
-        for(int i = 0; i < 100; i ++)
+        //double T = 1, T_min = 0.0001, alpha = 0.992 ;
+        double T = Config->T/(1+min(15, t)); //starting temperature
+        double T_min = Config->T_min;  //minimum temperature at which process stops
+        double alpha = Config->alpha ;//increment the temperature*/
+        //bestPerturber->perturb(0.1) ;
+        tPackage = bestPerturber->getBoxPackage() ;
+        bestCost = VS->getWeight(tPackage) ;
+        while (T > T_min)
         {
-            BoxPerturber* tPerturber = bestPerturber->clone() ;
-            tPerturber->perturb(T/2);
-            tPackage = tPerturber->getBoxPackage() ;
-            tCost = VS->getWeight(tPackage) ;
+            double tmp = pow(T, 0.3) ;
+            for(int i = 0; i < (t<=3?100:200); i ++)
+            {
+                BoxPerturber* tPerturber = bestPerturber->clone() ;
+                tPerturber->perturb(tmp*0.5);
+                tPackage = tPerturber->getBoxPackage() ;
+                tCost = VS->getWeight(tPackage) ;
 
 #ifdef DEBUGMODE
-            os << bestCost << " " << tCost << endl ;
+                os << bestCost << " " << tCost << " " << T << endl ;
 #endif
 
-            if(tCost < bestCost ||
-                    Config->accProb(bestCost, tCost, T) > Random(1000000000, 0)/1000000000.0)
-            {    
-                bestCost = tCost;
-                delete bestPerturber;
-                bestPerturber = tPerturber ;
-            } else{
-                delete tPerturber;
+                if(tCost < bestCost ||
+                        Config->accProb(bestCost, tCost, T) > Random(1000000000, 0)/1000000000.0)
+                {
+                    bestCost = tCost;
+                    delete bestPerturber;
+                    bestPerturber = tPerturber ;
+                } else{
+                    delete tPerturber;
+                }
+
             }
+            T *= alpha;
+        }
+        if(returnCost > bestCost)
+        {
+            cout << 2 << endl ;
+            if(returnCost != (long long)INF*INF)
+                delete returnPerturber ;
+            returnPerturber = bestPerturber ;
+            bestPerturber = bestPerturber->clone() ;
+            returnCost = bestCost ;
 
         }
-        T *= alpha;
+        else
+        {
+            delete bestPerturber ;
+            bestPerturber = returnPerturber->clone() ;
+        }
+        cout << 1 << endl ;
+        cout << returnCost << " " << bestCost << " " << returnPerturber << endl ;
     }
-    answer = bestPerturber->getBoxPackage() ;
-    return bestCost;
+    answer = returnPerturber->getBoxPackage() ;
+    return returnCost ;
 }

@@ -11,8 +11,8 @@
 
 class SAOptimalConfig {
 public:
-	double T, T_min, alpha ;
-    SAOptimalConfig(double T=1.0, double T_min=0.000001, double alpha=0.9) : T(T), T_min(T_min), alpha(alpha) {}
+    double T, T_min, alpha, gamma ;
+    SAOptimalConfig(double T=1.0, double T_min=0.000001, double alpha=0.9, double gamma=0.01) : T(T), T_min(T_min), alpha(alpha), gamma(gamma) {}
     double accProb(double, double, double); //calculates acceptance probability for SA algorithm
 };
 

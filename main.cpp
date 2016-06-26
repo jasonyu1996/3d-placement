@@ -38,11 +38,12 @@ int main()
     ifstream is(input.c_str()) ;
     ofstream os(output.c_str()) ;
 
+    double Volume = 0 ;
     srand(time(0)) ;
     Box b ;
-    while(is >> b) box.push_back(b) ;
+    while(is >> b) box.push_back(b), Volume += b.getVolume() ;
 
-    SAOptimalConfig conf = SAOptimalConfig() ;
+    SAOptimalConfig conf = SAOptimalConfig(1.0, 0.001, 0.995, 1/Volume) ;
     NaiveContourStructureFactory naive = NaiveContourStructureFactory() ;
     SAOptimalBoxPacker SA(new TTreeFactory(&naive), new BoxVolume(), &conf) ;
     SA.packBoxes(box, answer);
