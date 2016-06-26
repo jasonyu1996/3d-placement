@@ -8,35 +8,35 @@ typedef long long LL ;
 double SAOptimalConfig::accProb (double oldCost, double newCost, double T)
 {
     //if(T == 1) cout << gamma*(oldCost - newCost)/T << endl ;
-    return exp(gamma*(oldCost - newCost)/T);
+    return exp(gamma*(oldCost - newCost)/T); 
 }
 
 long long SAOptimalBoxPacker::packBoxes(const std::vector<Box>& box, BoxPackage& answer)
 {
     ofstream os("Debug.txt") ;
-    BoxPerturber  *bestPerturber = PS->getBoxPerturber(box), *returnPerturber ;
+    BoxPerturber  *bestPerturber = PS->getBoxPerturber(box), *returnPerturber; 
+    //bestPerturber saves the local optimum, returnPerturber saves the optimum among the bestPerterbur's
     
-    long long bestCost, tCost, returnCost = (long long)INF*INF ; // bestCost storesthe best cost of the packging, tCost is the temporary
-    BoxPackage tPackage; // bestPackage storesthe best cost of the packging, tPackage is the temporary
+    long long bestCost, tCost, returnCost = (long long)INF*INF ; // bestCost stores the best cost of the packging, tCost is the temporary
+    BoxPackage tPackage; //tPackage is the temporary
     
-    ///
-    ///
+
     for(int t = 0; t < 20; t ++)
     {
         //double T = 1, T_min = 0.0001, alpha = 0.992 ;
         double T = Config->T/(1+min(15, t)); //starting temperature
         double T_min = Config->T_min;  //minimum temperature at which process stops
-        double alpha = Config->alpha ;//increment the temperature*/
+        double alpha = Config->alpha ;//increment the temperature
         //bestPerturber->perturb(0.1) ;
         tPackage = bestPerturber->getBoxPackage() ;
         bestCost = VS->getWeight(tPackage) ;
         while (T > T_min)
         {
-            double tmp = pow(T, 0.3) ;
+            double tmp = pow(T, 0.3) ; 
             for(int i = 0; i < (t<=3?100:200); i ++)
             {
                 BoxPerturber* tPerturber = bestPerturber->clone() ;
-                tPerturber->perturb(tmp*0.5);
+                tPerturber->perturb(tmp*0.5) ; //neighboring case, implemented with tmp 
                 tPackage = tPerturber->getBoxPackage() ;
                 tCost = VS->getWeight(tPackage) ;
 
@@ -47,7 +47,7 @@ long long SAOptimalBoxPacker::packBoxes(const std::vector<Box>& box, BoxPackage&
                 if(tCost < bestCost ||
                         Config->accProb(bestCost, tCost, T) > Random(1000000000, 0)/1000000000.0)
                 {
-                    bestCost = tCost;
+                    bestCost = tCost; 
                     delete bestPerturber;
                     bestPerturber = tPerturber ;
                 } else{
@@ -57,7 +57,7 @@ long long SAOptimalBoxPacker::packBoxes(const std::vector<Box>& box, BoxPackage&
             }
             T *= alpha;
         }
-        if(returnCost > bestCost)
+        if(returnCost > bestCost) //compare new local optimum with previously saved local optimum
         {
             if(returnCost != (long long)INF*INF)
                 delete returnPerturber ;
