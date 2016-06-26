@@ -24,15 +24,19 @@ vector<Box> box ;
 BoxPackage answer ;
 string input, output ;
 
-int main()
+int main(int argc, char** argv)
 {
 
 #ifndef DEBUGMODE
     cin >> input ;
     cin >> output ;
 #else
-    input = "Input.txt" ;
-    output = "Output.txt" ;
+    if(argc < 2){
+        cout << "Please choose one testcase!" << endl;
+        return 1;
+    }
+    input = string("testcase/Input") + argv[1] + ".txt" ;
+    output = string("testcase/Output") + argv[1] + ".txt" ;
 #endif
 
     ifstream is(input.c_str()) ;
