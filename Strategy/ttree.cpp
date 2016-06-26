@@ -232,6 +232,8 @@ void TTree::randomSwap(){
 
 
 void TTree::perturb(double degree){
+    if((int)m_boxes.size() < 2)
+        return;
     int ti = (int)(20 * degree);
     for(int i = 0; i < ti; i ++)
         if(rand() % 2)

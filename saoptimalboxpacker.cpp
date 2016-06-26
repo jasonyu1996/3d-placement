@@ -40,21 +40,16 @@ long long SAOptimalBoxPacker::packBoxes(const std::vector<Box>& box, BoxPackage&
             os << bestCost << " " << tCost << endl ;
 #endif
 
-            if(tCost < bestCost)
+            if(tCost < bestCost ||
+                    Config->accProb(bestCost, tCost, T) > Random(1000000000, 0)/1000000000.0)
             {    
                 bestCost = tCost;
+                delete bestPerturber;
                 bestPerturber = tPerturber ;
+            } else{
+                delete tPerturber;
             }
-            else
-            {
-                if(Config->accProb(bestCost, tCost, T) > Random(1000000000, 0)/1000000000.0)
-                {   
-                    bestCost = tCost;
-                    bestPerturber = tPerturber ;
-                }   
-            }
-            
-            delete tPerturber ;
+
         }
         T *= alpha;
     }
