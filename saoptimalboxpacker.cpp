@@ -59,7 +59,6 @@ long long SAOptimalBoxPacker::packBoxes(const std::vector<Box>& box, BoxPackage&
         }
         if(returnCost > bestCost)
         {
-            cout << 2 << endl ;
             if(returnCost != (long long)INF*INF)
                 delete returnPerturber ;
             returnPerturber = bestPerturber ;
@@ -72,8 +71,6 @@ long long SAOptimalBoxPacker::packBoxes(const std::vector<Box>& box, BoxPackage&
             delete bestPerturber ;
             bestPerturber = returnPerturber->clone() ;
         }
-        cout << 1 << endl ;
-        cout << returnCost << " " << bestCost << " " << returnPerturber << endl ;
     }
     answer = returnPerturber->getBoxPackage() ;
     return returnCost ;
