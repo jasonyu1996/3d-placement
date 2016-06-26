@@ -1,4 +1,3 @@
-#define DEBUGMODE
 
 #include "kernel.h"
 #include "boxpacker.h"

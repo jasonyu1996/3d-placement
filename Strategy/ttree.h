@@ -35,7 +35,7 @@ class TTree : public BoxPerturber{
 public:
     BoxPackage getBoxPackage() ;
     void perturb(double degree) ;
-    TTree(const TTree& b);
+    //TTree(const TTree& b);
     TTree(ContourStructureFactory* contour_factory, const std::vector<Box>& boxes);
     ~TTree();
 private:

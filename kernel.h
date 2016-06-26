@@ -1,6 +1,8 @@
 #ifndef KERNEL_H
 #define KERNEL_H
 
+#define DEBUGMODE
+
 #include <cstdio>
 #include <cstdlib>
 #include <cmath>

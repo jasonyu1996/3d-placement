@@ -5,8 +5,8 @@
 class BoxPerturber {
 public:
     virtual ~BoxPerturber() { }
-    virtual BoxPackage getBoxPackage() = 0;
-    virtual void perturb(double degree) = 0 ;
+    virtual BoxPackage getBoxPackage() {return BoxPackage() ;}
+    virtual void perturb(double degree) {} ;
 };
 
 #endif // BOXPERTURBER_H

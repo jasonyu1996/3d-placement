@@ -10,46 +10,54 @@ double SAOptimalConfig::accProb (double oldCost, double newCost, double T)
     return exp((oldCost - newCost)/T);
 }
 
-int SAOptimalBoxPacker::packBoxes(const std::vector<Box>& box, BoxPackage& answer)
+long long SAOptimalBoxPacker::packBoxes(const std::vector<Box>& box, BoxPackage& answer)
 {
     ofstream os("Debug.txt") ;
-    BoxPerturber* perturber = PS->getBoxPerturber(box) ;
+    BoxPerturber* bestPerturber = PS->getBoxPerturber(box) ;
     
-    int bestCost = INF, tCost ; // bestCost storesthe best cost of the packging, tCost is the temporary
-    BoxPackage bestPackage, tPackage; // bestPackage storesthe best cost of the packging, tPackage is the temporary
+    long long bestCost, tCost ; // bestCost storesthe best cost of the packging, tCost is the temporary
+    BoxPackage tPackage; // bestPackage storesthe best cost of the packging, tPackage is the temporary
     
     ///
-    double T = 1.0; //starting temperature
-    double T_min = 0.000001;  //minimum temperature at which process stops
-    double alpha = 0.9 //increment the temperature
+    double T = Config->T; //starting temperature
+    double T_min = Config->T_min;  //minimum temperature at which process stops
+    double alpha = Config->alpha ;//increment the temperature
     ///
     
+    tPackage = bestPerturber->getBoxPackage() ;
+    bestCost = VS->getWeight(tPackage) ;
+
     while (T > T_min)
     {
         for(int i = 0; i < 100; i ++)
         {
-            perturber->perturb(Random(10, 1)/10.0);
-            tPackage = perturber->getBoxPackage() ;
+            BoxPerturber* tPerturber = bestPerturber->clone() ;
+            tPerturber->perturb(T/2);
+            tPackage = tPerturber->getBoxPackage() ;
             tCost = VS->getWeight(tPackage) ;
+
+#ifdef DEBUGMODE
             os << bestCost << " " << tCost << endl ;
-            
+#endif
+
             if(tCost < bestCost)
             {    
-                bestCost = tCost; 
-                bestPackage = tPackage;
-                answer = bestPackage; 
+                bestCost = tCost;
+                bestPerturber = tPerturber ;
             }
             else
             {
-                if(Config->accProb(bestCost, tCost, T) > Random(1, 0))
+                if(Config->accProb(bestCost, tCost, T) > Random(1000000000, 0)/1000000000.0)
                 {   
-                    bestCost = tCost; 
-                    bestPackage = tPackage;
+                    bestCost = tCost;
+                    bestPerturber = tPerturber ;
                 }   
             }
             
+            delete tPerturber ;
         }
         T *= alpha;
     }
+    answer = bestPerturber->getBoxPackage() ;
     return bestCost;
 }
